@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import moment from "moment";
 import "./styles.css";
 
 export default function Calendar({ value, onChange }) {
@@ -31,8 +32,21 @@ export default function Calendar({ value, onChange }) {
       {calendar.map((week, wi) => (
         <div key={wi}>
           {week.map((day, di) => (
-            <div key={di} className="day">
-              {day.format("D").toString()}
+            <div
+              key={di}
+              className="day"
+              onClick={() => {
+                if (day < moment(new Date()).startOf("day")) return;
+                onChange(day);
+              }}
+            >
+              <div
+                className={`${
+                  value.isSame(day, "day") ? "selected" : ""
+                }`}
+              >
+                {day.format("D").toString()}
+              </div>
             </div>
           ))}
         </div>
