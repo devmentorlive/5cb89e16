@@ -5,6 +5,10 @@ import "./styles.css";
 export default function Calendar({ value, onChange }) {
   const [calendar, setCalendar] = useState([]);
 
+  useEffect(() => {
+    setCalendar(buildCalendar(value));
+  }, [value]);
+
   function buildCalendar(date) {
     const a = [];
 
@@ -23,12 +27,32 @@ export default function Calendar({ value, onChange }) {
     return a;
   }
 
-  useEffect(() => {
-    setCalendar(buildCalendar(value));
-  }, [value]);
+  function isSelected(day) {
+    return value.isSame(day, "day");
+  }
+
+  function beforeToday(day) {
+    return moment(day).isBefore(new Date(), "day");
+  }
+
+  function isToday(day) {
+    return moment(new Date()).isSame(day, "day");
+  }
+
+  function dayStyles(day) {
+    if (beforeToday(day)) return "before";
+    if (isSelected(day)) return "selected";
+    if (isToday(day)) return "today";
+    return "";
+  }
 
   return (
     <div className="calendar">
+      <div className="day-names">
+        {["s", "m", "t", "w", "t", "f", "s"].map((d) => (
+          <div className="week">{d}</div>
+        ))}
+      </div>
       {calendar.map((week, wi) => (
         <div key={wi}>
           {week.map((day, di) => (
@@ -40,11 +64,7 @@ export default function Calendar({ value, onChange }) {
                 onChange(day);
               }}
             >
-              <div
-                className={`${
-                  value.isSame(day, "day") ? "selected" : ""
-                }`}
-              >
+              <div className={dayStyles(day)}>
                 {day.format("D").toString()}
               </div>
             </div>
