@@ -46,31 +46,67 @@ export default function Calendar({ value, onChange }) {
     return "";
   }
 
+  function currMonthName() {
+    return value.format("MMMM");
+  }
+
+  function currYear() {
+    return value.format("YYYY");
+  }
+
   return (
     <div className="calendar">
-      <div className="day-names">
-        {["s", "m", "t", "w", "t", "f", "s"].map((d) => (
-          <div className="week">{d}</div>
-        ))}
+      <div className="header">
+        <div className="previous">
+          <a
+            onClick={() => {
+              const newDate = value.clone().subtract(1, "month");
+              onChange(newDate);
+            }}
+          >
+            {String.fromCharCode(171)}
+          </a>
+        </div>
+        <div className="current">
+          {currMonthName()} {currYear()}
+        </div>
+        <div className="next">
+          <a
+            onClick={() => {
+              const newDate = value.clone().add(1, "month");
+              onChange(newDate);
+            }}
+          >
+            {String.fromCharCode(187)}
+          </a>
+        </div>
       </div>
-      {calendar.map((week, wi) => (
-        <div key={wi}>
-          {week.map((day, di) => (
-            <div
-              key={di}
-              className="day"
-              onClick={() => {
-                if (day < moment(new Date()).startOf("day")) return;
-                onChange(day);
-              }}
-            >
-              <div className={dayStyles(day)}>
-                {day.format("D").toString()}
-              </div>
-            </div>
+
+      <div className="body">
+        <div className="day-names">
+          {["s", "m", "t", "w", "t", "f", "s"].map((d) => (
+            <div className="week">{d}</div>
           ))}
         </div>
-      ))}
+        {calendar.map((week, wi) => (
+          <div key={wi}>
+            {week.map((day, di) => (
+              <div
+                key={di}
+                className="day"
+                onClick={() => {
+                  if (day < moment(new Date()).startOf("day")) return;
+                  onChange(day);
+                }}
+              >
+                <div className={dayStyles(day)}>
+                  {day.format("D").toString()}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
