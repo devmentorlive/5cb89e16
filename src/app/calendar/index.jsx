@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
+import Header from "./header";
 import "./styles.css";
 
 export default function Calendar({ value, onChange }) {
@@ -56,31 +57,7 @@ export default function Calendar({ value, onChange }) {
 
   return (
     <div className="calendar">
-      <div className="header">
-        <div className="previous">
-          <a
-            onClick={() => {
-              const newDate = value.clone().subtract(1, "month");
-              onChange(newDate);
-            }}
-          >
-            {String.fromCharCode(171)}
-          </a>
-        </div>
-        <div className="current">
-          {currMonthName()} {currYear()}
-        </div>
-        <div className="next">
-          <a
-            onClick={() => {
-              const newDate = value.clone().add(1, "month");
-              onChange(newDate);
-            }}
-          >
-            {String.fromCharCode(187)}
-          </a>
-        </div>
-      </div>
+      <Header value={value} onChange={onChange} />
 
       <div className="body">
         <div className="day-names">
