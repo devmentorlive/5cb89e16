@@ -1,15 +1,13 @@
-import moment from "moment";
-
 function isSelected(day, value) {
   return value.isSame(day, "day");
 }
 
-function beforeToday(day) {
-  return moment(day).isBefore(new Date(), "day");
+export function beforeToday(day) {
+  return day.isBefore(new Date(), "day");
 }
 
 function isToday(day) {
-  return moment(new Date()).isSame(day, "day");
+  return day.isSame(new Date(), "day");
 }
 
 export default function dayStyles(day, value) {
